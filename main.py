@@ -1,11 +1,36 @@
 import scratchattach
 import tkinter as tk
+from tkinter import messagebox
+
+class BetterScratchUserProfileEntry(tk.Toplevel):
+    def __init__(self,master):
+        super().__init__(master)
+        self.master=master
+        self.create_form()
+    def create_form(self):
+        self.nouserlabel=tk.Label(text="That user does not exist.")
+        self.usernameentry=tk.Entry(self)
+        self.usernameentry.grid(row=1,column=0)
+        self.lookupbutton=tk.Button(self,text="Lookup",command=self.lookup)
+        self.lookupbutton.grid(row=2,column=0)
+    def lookup(self):
+        user=self.usernameentry.get()
+        print(scratchattach.check_username(user))
 
 class BetterScratchAccountDialog(tk.Toplevel):
     def __init__(self,master):
         super().__init__(master)
         self.master=master
         self.create_form()
+    def loginhandler(self):
+        try:
+            session=scratchattach.login(self.username_entry.get(),self.password_entry.get())
+        except:
+            self.incorrect_label.grid(row=2,column=0,columnspan=2)
+        else:
+            self.master.sessions.append(session)
+            messagebox.showinfo("Login successful")
+            self.destroy()
     def create_form(self):
         self.username_label=tk.Label(self,text="Username:")
         self.username_label.grid(row=0,column=0)
@@ -13,10 +38,11 @@ class BetterScratchAccountDialog(tk.Toplevel):
         self.username_entry.grid(row=0,column=1)
         self.password_label=tk.Label(self,text="Password:")
         self.password_label.grid(row=1,column=0)
-        self.password_entry=tk.Entry(self)
+        self.password_entry=tk.Entry(self,show="\u25cf")
         self.password_entry.grid(row=1,column=1)
+        self.incorrect_label=tk.Label(self,text="Your username or password is incorrect")
         self.submit_button=tk.Button(self,text="Log in",command=self.loginhandler)
-        self.submit_button.grid(row=2,column=0,columnspan=2)
+        self.submit_button.grid(row=3,column=0,columnspan=2)
 
 class BetterScratch(tk.Tk):
     def __init__(self):
@@ -26,9 +52,12 @@ class BetterScratch(tk.Tk):
     def add_buttons(self):
         addacctbutton=tk.Button(self,text="Add account",command=self.add_acct_handler)
         addacctbutton.pack()
+        showuserbutton=tk.Button(self,text="Lookup user",command=self.lookup_user)
+        showuserbutton.pack()
+    def lookup_user(self):
+        user_dialog=BetterScratchUserProfileEntry(self)
     def add_acct_handler(self):
         acct_dialog=BetterScratchAccountDialog(self)
-        acct_dialog
 
 def main():
     app=BetterScratch()
