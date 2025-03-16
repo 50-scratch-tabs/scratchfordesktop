@@ -62,7 +62,8 @@ class BetterScratchProfilePage(tk.Toplevel):
         self.abtmelabel.grid(row=0,column=0)
         self.aboutme=tk.Text(self)
         self.aboutme.grid(row=1,column=0)
-        self.aboutme.insert(0,self.sauser)
+        self.aboutme.insert("0.0",self.sauser.bio)
+        self.aboutme.config(state="disabled")
 
 class BetterScratch(tk.Tk):
     def __init__(self):
