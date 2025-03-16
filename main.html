@@ -5,7 +5,7 @@
     </head>
     <body>
         <div id="home"><button id="login-btn">Log in to Scratch</button></div>
-        <div id="login-panel" style="display:none;">
+        <div id="login-panel">
             <button id="return-home-from-login">Home</button>
             <br>
             <input type="text" id="username-input" placeholder="Username">
@@ -13,6 +13,16 @@
             <input type="password" id="password-input" placeholder="Password">
             <br>
             <button id="login-submit-btn">Submit</button>
+        </div>
+        <div id="login-list">
+            <button id="return-home-from-login">Home</button>
+            <br>
+            <input type="text" id="username-input" placeholder="Username">
+            <br>
+            <input type="password" id="password-input" placeholder="Password">
+            <br>
+            <button id="login-submit-btn">Submit</button>
+        </div>
         <script>
             (function(){
                 let loginbtn=document.getElementById("login-btn");
@@ -21,6 +31,7 @@
                 let loginpanel=document.getElementById("login-panel");
                 let passwordinput=document.getElementById("password-input");
                 let usernameinput=document.getElementById("username-input");
+                let loginsubmitbtn=document.getElementById("login-submit-btn");
                 loginbtn.addEventListener("click",()=>{
                     homepanel.style.display="none";
                     loginpanel.style.display="block";
@@ -30,7 +41,14 @@
                     homepanel.style.display="block";
                 });
                 loginsubmitbtn.addEventListener("click",()=>{
-                    window.pywebview.api.login(usernameinput.value,passwordinput.value)
+                    alert("login");
+                    window.pywebview.api.login(usernameinput.value,passwordinput.value).then((r)=>{
+                        if (r) {
+                            alert("Success");
+                        } else {
+                            alert("Failure")
+                        }
+                    })
                 });
             })()
         </script>
