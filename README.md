@@ -1,0 +1,1 @@
+This is a better interface for scratch. It uses scratchattach.
