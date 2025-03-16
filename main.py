@@ -15,7 +15,14 @@ class BetterScratchUserProfileEntry(tk.Toplevel):
         self.lookupbutton.grid(row=2,column=0)
     def lookup(self):
         user=self.usernameentry.get()
-        print(scratchattach.check_username(user))
+        try:
+            sauserobject=scratchattach.get_user(user)
+        except scratchattach.utils.exceptions.UserNotFound:
+            self.nouserlabel.grid(row=0,column=0)
+        else:
+            if not sauserobject.does_exist():
+                messagebox.showwarning("Deleted account","This user account has been deleted, but you can still view the profile.")
+            self.master.create_user_profile_dialog(sauserobject)
 
 class BetterScratchAccountDialog(tk.Toplevel):
     def __init__(self,master):
@@ -44,11 +51,26 @@ class BetterScratchAccountDialog(tk.Toplevel):
         self.submit_button=tk.Button(self,text="Log in",command=self.loginhandler)
         self.submit_button.grid(row=3,column=0,columnspan=2)
 
+class BetterScratchProfilePage(tk.Toplevel):
+    def __init__(self,master,sauser):
+        super().__init__(master)
+        self.master=master
+        self.sauser=sauser
+        self.create_form()
+    def create_form(self):
+        self.abtmelabel=tk.Label(self,text="About me")
+        self.abtmelabel.grid(row=0,column=0)
+        self.aboutme=tk.Text(self)
+        self.aboutme.grid(row=1,column=0)
+        self.aboutme.insert(0,self.sauser)
+
 class BetterScratch(tk.Tk):
     def __init__(self):
         super().__init__()
         self.sessions=[]
         self.add_buttons()
+    def create_user_account_dialog(self,username):
+        page=BetterScratchProfilePage(self,username)
     def add_buttons(self):
         addacctbutton=tk.Button(self,text="Add account",command=self.add_acct_handler)
         addacctbutton.pack()
