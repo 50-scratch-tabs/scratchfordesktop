@@ -69,7 +69,7 @@ class BetterScratch(tk.Tk):
         super().__init__()
         self.sessions=[]
         self.add_buttons()
-    def create_user_account_dialog(self,username):
+    def create_user_profile_dialog(self,username):
         page=BetterScratchProfilePage(self,username)
     def add_buttons(self):
         addacctbutton=tk.Button(self,text="Add account",command=self.add_acct_handler)
