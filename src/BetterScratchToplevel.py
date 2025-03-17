@@ -1,4 +1,5 @@
 import tkinter as tk
+from .BetterScratchMenuBar import BetterScratchMenuBar
 
 class BetterScratchToplevel(tk.Toplevel):
     def __init__(self,master,kind):
