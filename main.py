@@ -15,17 +15,17 @@ class BetterScratchMenuBar(tk.Menu):
         self.add_command(label="Thing",command=lambda:print("Thing!!!!"))
         self.add_cascade(label="Window",menu=self.master.window_menu)
 class BetterScratchToplevel(tk.Toplevel):
-    def __init__(self,master):
+    def __init__(self,master,kind):
         super().__init__(master)
         self.master=master
-        self.menu=BetterScratchMenuBar(self.master)
+        self.menu=BetterScratchMenuBar(self.master,kind)
         self.config(menu=self.menu)
     def close(self):
         self.destroy()
 
 class BetterScratchUserProfileEntry(BetterScratchToplevel):
     def __init__(self,master):
-        super().__init__(master)
+        super().__init__(master,"profilelookup")
         self.master=master
         self.create_form()
     def create_form(self):
@@ -47,7 +47,7 @@ class BetterScratchUserProfileEntry(BetterScratchToplevel):
 
 class BetterScratchAccountDialog(BetterScratchToplevel):
     def __init__(self,master):
-        super().__init__(master)
+        super().__init__(master,"loginbox")
         self.master=master
         self.create_form()
     def loginhandler(self):
@@ -74,7 +74,7 @@ class BetterScratchAccountDialog(BetterScratchToplevel):
 
 class BetterScratchProfilePage(BetterScratchToplevel):
     def __init__(self,master,sauser):
-        super().__init__(master)
+        super().__init__(master,"profile")
         self.master=master
         self.sauser=sauser
         self.create_form()
@@ -97,7 +97,7 @@ class BetterScratch(tk.Tk):
         super().__init__()
         self.sessions=[]
         self.add_buttons()
-        self.menu=BetterScratchMenuBar(self)
+        self.menu=BetterScratchMenuBar(self,"master")
         self.config(menu=self.menu)
     def create_user_profile_dialog(self,username):
         page=BetterScratchProfilePage(self,username)
