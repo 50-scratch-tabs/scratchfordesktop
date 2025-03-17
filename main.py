@@ -9,24 +9,30 @@ class BetterScratchMenuBar(tk.Menu):
         self.kind=kind
         self.create_items()
     def create_items(self):
-        if self.kind=="master":
-            self.master.window_menu=tk.Menu(self.master)
-            self.master.window_menu.add_radiobutton(label="Main",command=self.master.focus)
         self.add_command(label="Thing",command=lambda:print("Thing!!!!"))
         self.add_cascade(label="Window",menu=self.master.window_menu)
 class BetterScratchToplevel(tk.Toplevel):
     def __init__(self,master,kind):
+        self.master.windowmenuitems.append(self)
         super().__init__(master)
         self.master=master
         self.menu=BetterScratchMenuBar(self.master,kind)
         self.config(menu=self.menu)
+        self.master.window_menu.add_radiobutton(label=self.title(),command=self.focus)
+        self.protocol("WM_DELETE_WINDOW",self.close)
     def close(self):
+        self.master.window_menu.delete(self.master.windowmenuitems.index(self)+1)
+        del self.master.windowmenuitems[self.master.windowmenuitems.index(self)]
         self.destroy()
+    def title(self,title=None):
+        if title is not None:
+            self.master.window_menu.entryconfigure(self.master.windowmenuitems.index(self)+1,label=title)
+        return super().title(title)
 
 class BetterScratchUserProfileEntry(BetterScratchToplevel):
     def __init__(self,master):
-        super().__init__(master,"profilelookup")
         self.master=master
+        super().__init__(master,"profilelookup")
         self.create_form()
     def create_form(self):
         self.nouserlabel=tk.Label(text="That user does not exist.")
@@ -47,8 +53,8 @@ class BetterScratchUserProfileEntry(BetterScratchToplevel):
 
 class BetterScratchAccountDialog(BetterScratchToplevel):
     def __init__(self,master):
-        super().__init__(master,"loginbox")
         self.master=master
+        super().__init__(master,"loginbox")
         self.create_form()
     def loginhandler(self):
         try:
@@ -74,8 +80,8 @@ class BetterScratchAccountDialog(BetterScratchToplevel):
 
 class BetterScratchProfilePage(BetterScratchToplevel):
     def __init__(self,master,sauser):
-        super().__init__(master,"profile")
         self.master=master
+        super().__init__(master,"profile")
         self.sauser=sauser
         self.create_form()
     def create_form(self):
@@ -95,10 +101,14 @@ class BetterScratchProfilePage(BetterScratchToplevel):
 class BetterScratch(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.windowmenuitems=[self]
+        self.window_menu=tk.Menu(self,tearoff=False)
         self.sessions=[]
         self.add_buttons()
         self.menu=BetterScratchMenuBar(self,"master")
         self.config(menu=self.menu)
+        self.window_menu.add_radiobutton(label=self.title(),command=self.focus)
+        self.title("BetterScratch")
     def create_user_profile_dialog(self,username):
         page=BetterScratchProfilePage(self,username)
     def add_buttons(self):
@@ -110,6 +120,10 @@ class BetterScratch(tk.Tk):
         user_dialog=BetterScratchUserProfileEntry(self)
     def add_acct_handler(self):
         acct_dialog=BetterScratchAccountDialog(self)
+    def title(self,title=None):
+        if title is not None:
+            self.window_menu.entryconfigure(self.windowmenuitems.index(self)+1,label=title)
+        return super().title(title)
 
 def main():
     app=BetterScratch()
