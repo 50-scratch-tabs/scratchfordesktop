@@ -3,19 +3,25 @@ import tkinter as tk
 from tkinter import messagebox
 
 class BetterScratchMenuBar(tk.Menu):
-    def __init__(self,master):
+    def __init__(self,master,kind):
         super().__init__(master)
         self.master=master
+        self.kind=kind
         self.create_items()
     def create_items(self):
+        if self.kind=="master":
+            self.master.window_menu=tk.Menu(self.master)
+            self.master.window_menu.add_radiobutton(label="Main",command=self.master.focus)
         self.add_command(label="Thing",command=lambda:print("Thing!!!!"))
-
+        self.add_cascade(label="Window",menu=self.master.window_menu)
 class BetterScratchToplevel(tk.Toplevel):
     def __init__(self,master):
         super().__init__(master)
         self.master=master
-        self.menu=BetterScratchMenuBar(self)
+        self.menu=BetterScratchMenuBar(self.master)
         self.config(menu=self.menu)
+    def close(self):
+        self.destroy()
 
 class BetterScratchUserProfileEntry(BetterScratchToplevel):
     def __init__(self,master):
