@@ -2,6 +2,12 @@ import scratchattach
 import tkinter as tk
 from tkinter import messagebox
 
+class BetterScratchMenuBar(tk.Menu):
+    def __init__(self,master):
+        super().__init__(master)
+        self.master=master
+        self.create_items()
+
 class BetterScratchUserProfileEntry(tk.Toplevel):
     def __init__(self,master):
         super().__init__(master)
