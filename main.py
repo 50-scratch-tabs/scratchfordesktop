@@ -7,8 +7,17 @@ class BetterScratchMenuBar(tk.Menu):
         super().__init__(master)
         self.master=master
         self.create_items()
+    def create_items(self):
+        self.add_command(label="Thing",command=lambda:print("Thing!!!!"))
 
-class BetterScratchUserProfileEntry(tk.Toplevel):
+class BetterScratchToplevel(tk.Toplevel):
+    def __init__(self,master):
+        super().__init__(master)
+        self.master=master
+        self.menu=BetterScratchMenuBar(self)
+        self.config(menu=self.menu)
+
+class BetterScratchUserProfileEntry(BetterScratchToplevel):
     def __init__(self,master):
         super().__init__(master)
         self.master=master
@@ -30,7 +39,7 @@ class BetterScratchUserProfileEntry(tk.Toplevel):
                 messagebox.showwarning("Deleted account","This user account has been deleted, but you can still view the profile.")
             self.master.create_user_profile_dialog(sauserobject)
 
-class BetterScratchAccountDialog(tk.Toplevel):
+class BetterScratchAccountDialog(BetterScratchToplevel):
     def __init__(self,master):
         super().__init__(master)
         self.master=master
@@ -57,7 +66,7 @@ class BetterScratchAccountDialog(tk.Toplevel):
         self.submit_button=tk.Button(self,text="Log in",command=self.loginhandler)
         self.submit_button.grid(row=3,column=0,columnspan=2)
 
-class BetterScratchProfilePage(tk.Toplevel):
+class BetterScratchProfilePage(BetterScratchToplevel):
     def __init__(self,master,sauser):
         super().__init__(master)
         self.master=master
@@ -82,6 +91,8 @@ class BetterScratch(tk.Tk):
         super().__init__()
         self.sessions=[]
         self.add_buttons()
+        self.menu=BetterScratchMenuBar(self)
+        self.config(menu=self.menu)
     def create_user_profile_dialog(self,username):
         page=BetterScratchProfilePage(self,username)
     def add_buttons(self):
