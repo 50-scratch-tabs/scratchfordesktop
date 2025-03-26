@@ -25,4 +25,4 @@ class BetterScratchProfilePage(BetterScratchToplevel):
         self.commentsframe=tk.Frame(self)
         for i in self.sauser.comments():
             BetterScratchCommentDisplay(self.commentsframe,i).pack()
-        self.commentsframe.grid(row=1,column=0)
+        self.commentsframe.grid(row=4,column=0)
