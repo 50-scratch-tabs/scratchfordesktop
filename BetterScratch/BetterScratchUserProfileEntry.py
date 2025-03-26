@@ -8,7 +8,7 @@ class BetterScratchUserProfileEntry(BetterScratchToplevel):
         self.master=master
         super().__init__(master,"profilelookup")
         self.create_form()
-        self.resizable(False)
+        self.resizable(False,False)
         self.minsize(180,50)
         self.geometry("180x50")
     def create_form(self):
